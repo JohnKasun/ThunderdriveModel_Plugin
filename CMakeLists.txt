@@ -62,6 +62,9 @@ juce_add_gui_app(TestProject
 
 target_sources(TestProject
     PRIVATE
+        src/Main.cpp
+        src/MainComponent.cpp
+        src/MainComponent.h
         )
 
 
@@ -99,7 +102,6 @@ target_compile_definitions(TestProject
 target_link_libraries(TestProject
     PRIVATE
         # GuiAppData            # If we'd created a binary data target, we'd link to it here
-        Common
         juce::juce_gui_extra
     PUBLIC
         juce::juce_recommended_config_flags
