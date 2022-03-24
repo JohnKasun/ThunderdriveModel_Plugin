@@ -15,7 +15,7 @@ cmake_minimum_required(VERSION 3.15)
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
 
-project(MUSICAL_CHESS VERSION 0.0.1)
+project(TestProject VERSION 0.0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -72,35 +72,14 @@ target_sources(TestProject
 # definitions will be visible both to your code, and also the JUCE module code, so for new
 # definitions, pick unique names that are unlikely to collide! This is a standard CMake command.
 
-target_compile_definitions(MusicalChess
+target_compile_definitions(TestProject
     PRIVATE
         # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
         JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_gui_app` call
         JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_gui_app` call
-	JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:MusicalChess,JUCE_PRODUCT_NAME>"
-	JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:MusicalChess,JUCE_VERSION>")
+	JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:TestProject,JUCE_PRODUCT_NAME>"
+	JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:TestProject,JUCE_VERSION>")
 
-target_compile_definitions(Tests
-    PRIVATE
-        # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
-        JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_gui_app` call
-        JUCE_USE_CURL=0)    # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_gui_app` call
-
-target_compile_definitions(SonifierTest
-		PRIVATE
-		# JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
-		JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_gui_app` call
-		JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_gui_app` call
-		JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:MusicalChess,JUCE_PRODUCT_NAME>"
-		JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:MusicalChess,JUCE_VERSION>")
-
-target_compile_definitions(SoundTests
-    PRIVATE
-        # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
-        JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_gui_app` call
-        JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_gui_app` call
-        JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:SoundTests,JUCE_PRODUCT_NAME>"
-        JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:SoundTests,JUCE_VERSION>")
 
 # If your target needs extra binary assets, you can add them here. The first argument is the name of
 # a new static library target that will include all the binary resources. There is an optional
