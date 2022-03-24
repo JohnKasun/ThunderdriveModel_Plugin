@@ -19,6 +19,8 @@ project(TestProject VERSION 0.0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 
+include_directories(catch2)
+
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
 # included JUCE directly in your source tree (perhaps as a submodule), you'll need to tell CMake to
@@ -46,6 +48,8 @@ juce_add_gui_app(TestProject
     # COMPANY_NAME ...                  # Specify the name of the app's author
     PRODUCT_NAME "TestProject")     # The name of the final executable, which can differ from the target name
 
+juce_add_console_app(TestingTarget
+    PRODUCT_NAME "TestingTarget")
 
 # `juce_generate_juce_header` will create a JuceHeader.h for a given target, which will be generated
 # into your build tree. This should be included with `#include <JuceHeader.h>`. The include path for
@@ -67,6 +71,10 @@ target_sources(TestProject
         src/MainComponent.h
         )
 
+target_sources(TestingTarget
+    PRIVATE
+        src/testing/main.cpp)
+
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use
@@ -83,6 +91,10 @@ target_compile_definitions(TestProject
 	JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:TestProject,JUCE_PRODUCT_NAME>"
 	JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:TestProject,JUCE_VERSION>")
 
+target_compile_definitions(TestingTarget
+    PRIVATE
+    JUCE_WEB_BROWSER=0
+    JUCE_USE_CURL=0)
 
 # If your target needs extra binary assets, you can add them here. The first argument is the name of
 # a new static library target that will include all the binary resources. There is an optional
@@ -107,5 +119,10 @@ target_link_libraries(TestProject
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
+
+target_link_libraries(TestingTarget
+    PRIVATE)
+
+
 
         
