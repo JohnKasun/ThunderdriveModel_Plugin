@@ -1,12 +1,13 @@
 #pragma once
 
-#include <juce_gui_extra/juce_gui_extra.h>
-
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
+
+#include <JuceHeader.h>
+
 class MainComponent : public juce::Component
 {
 public:
