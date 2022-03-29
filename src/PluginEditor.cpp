@@ -15,6 +15,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     mLevelSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 50);
     mLevelSlider.setTextValueSuffix("%");
     mLevelSlider.setRange(0, 100);
+    mLevelSlider.addListener(this);
 
     addAndMakeVisible(mGainSlider);
     mGainSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
@@ -57,4 +58,10 @@ void AudioPluginAudioProcessorEditor::resized()
     auto GainLabelArea = GainSliderArea.removeFromTop(GainSliderArea.getHeight() / 4);
     mGainSlider.setBounds(GainSliderArea);
     mGainLabel.setBounds(GainLabelArea);
+}
+
+void AudioPluginAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
+{
+    if (slider == &mLevelSlider)
+        processorRef.mGain = slider->getValue() / 100.0f;
 }
