@@ -15,6 +15,12 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     addAndMakeVisible(mGainSlider);
     mGainAttachment.reset(new SliderAttachment(mValueTreeState, "gain", mGainSlider));
 
+    mDriveLabel.setText("Drive", juce::dontSendNotification);
+    addAndMakeVisible(mDriveLabel);
+
+    addAndMakeVisible(mDriveSlider);
+    mDriveAttachment.reset(new SliderAttachment(mValueTreeState, "drive", mDriveSlider));
+
     setSize(paramSliderWidth + paramLabelWidth, juce::jmax(100, paramControlHeight * 2));
 
 }
@@ -36,6 +42,10 @@ void AudioPluginAudioProcessorEditor::resized()
     auto gainRect = r.removeFromTop(paramControlHeight);
     mGainLabel.setBounds(gainRect.removeFromLeft(paramLabelWidth));
     mGainSlider.setBounds(gainRect);
+
+    auto driveRect = r;
+    mDriveLabel.setBounds(driveRect.removeFromLeft(paramLabelWidth));
+    mDriveSlider.setBounds(driveRect);
 
 }
 

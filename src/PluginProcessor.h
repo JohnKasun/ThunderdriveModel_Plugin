@@ -48,6 +48,7 @@ private:
     float mPreviousGain;
 
     std::atomic<float>* mGainParameter = nullptr;
+    std::atomic<float>* mDriveParameter = nullptr;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)

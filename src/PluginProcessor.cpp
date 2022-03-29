@@ -17,10 +17,16 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                                                         "Gain",
                                                         0.0f,
                                                         1.0f,
-                                                        0.5f)
+                                                        0.5f),
+            std::make_unique<juce::AudioParameterFloat>("drive",
+                                                        "Drive",
+                                                        0.0f,
+                                                        1.0f,
+                                                        0.0f)
         })
 {
     mGainParameter = mParameters.getRawParameterValue("gain");
+    mDriveParameter = mParameters.getRawParameterValue("drive");
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()

@@ -26,9 +26,14 @@ public:
 private:
 
     juce::AudioProcessorValueTreeState& mValueTreeState;
+
     juce::Label mGainLabel;
     juce::Slider mGainSlider;
     std::unique_ptr<SliderAttachment> mGainAttachment;
+
+    juce::Label mDriveLabel;
+    juce::Slider mDriveSlider;
+    std::unique_ptr<SliderAttachment> mDriveAttachment;
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
