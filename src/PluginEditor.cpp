@@ -9,6 +9,28 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (400, 300);
+
+    addAndMakeVisible(mLevelSlider);
+    mLevelSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    mLevelSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 50);
+    mLevelSlider.setTextValueSuffix("%");
+    mLevelSlider.setRange(0, 100);
+
+    addAndMakeVisible(mGainSlider);
+    mGainSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    mGainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 50);
+    mGainSlider.setTextValueSuffix("%");
+    mGainSlider.setRange(0, 100);
+
+    addAndMakeVisible(mLevelLabel);
+    mLevelLabel.attachToComponent(&mLevelSlider, false);
+    mLevelLabel.setJustificationType(juce::Justification::centred);
+    mLevelLabel.setText("Level", juce::NotificationType::dontSendNotification);
+
+    addAndMakeVisible(mGainLabel);
+    mGainLabel.attachToComponent(&mGainSlider, false);
+    mGainLabel.setJustificationType(juce::Justification::centred);
+    mGainLabel.setText("Gain", juce::NotificationType::dontSendNotification);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
@@ -20,14 +42,19 @@ void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void AudioPluginAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    auto area = getBounds().reduced(10);
+
+    auto LevelSliderArea = area.removeFromLeft(getWidth() / 2);
+    auto LevelLabelArea = LevelSliderArea.removeFromTop(LevelSliderArea.getHeight() / 4);
+    mLevelSlider.setBounds(LevelSliderArea);
+    mLevelLabel.setBounds(LevelLabelArea);
+
+    auto GainSliderArea = area;
+    auto GainLabelArea = GainSliderArea.removeFromTop(GainSliderArea.getHeight() / 4);
+    mGainSlider.setBounds(GainSliderArea);
+    mGainLabel.setBounds(GainLabelArea);
 }
