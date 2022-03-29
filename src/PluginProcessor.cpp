@@ -10,8 +10,17 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+    mParameters(*this, nullptr, juce::Identifier("Parameters"), 
+        {
+            std::make_unique<juce::AudioParameterFloat>("gain",
+                                                        "Gain",
+                                                        0.0f,
+                                                        1.0f,
+                                                        0.5f)
+        })
 {
+    mGainParameter = mParameters.getRawParameterValue("gain");
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -136,6 +145,8 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+
+    float currentGain = *mGainParameter;
     for (int channel = 0; channel < totalNumOutputChannels; channel++)
     {
         int actualInputChannel = channel % totalNumInputChannels;
@@ -143,7 +154,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         float* outBuffer = buffer.getWritePointer(channel);
         for (int sample = 0; sample < buffer.getNumSamples(); sample++)
         {
-            outBuffer[sample] = mGain * inBuffer[sample];
+            outBuffer[sample] = currentGain * inBuffer[sample];
         }
     }
 }
@@ -156,23 +167,23 @@ bool AudioPluginAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* AudioPluginAudioProcessor::createEditor()
 {
-    return new AudioPluginAudioProcessorEditor (*this);
+    return new AudioPluginAudioProcessorEditor (*this, mParameters);
 }
 
 //==============================================================================
 void AudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
-    juce::ignoreUnused (destData);
+    auto state = mParameters.copyState();
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
-    juce::ignoreUnused (data, sizeInBytes);
+    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary(data, sizeInBytes));
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName(mParameters.state.getType()))
+            mParameters.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
 
 //==============================================================================

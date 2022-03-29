@@ -2,36 +2,21 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p)
+AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor (&p), 
+      processorRef (p), 
+      mValueTreeState(vts)
 {
-    juce::ignoreUnused (processorRef);
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
 
-    addAndMakeVisible(mLevelSlider);
-    mLevelSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    mLevelSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 50);
-    mLevelSlider.setTextValueSuffix("%");
-    mLevelSlider.setRange(0, 100);
-    mLevelSlider.addListener(this);
+
+    mGainLabel.setText("Gain", juce::dontSendNotification);
+    addAndMakeVisible(mGainLabel);
 
     addAndMakeVisible(mGainSlider);
-    mGainSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    mGainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 50);
-    mGainSlider.setTextValueSuffix("%");
-    mGainSlider.setRange(0, 100);
+    mGainAttachment.reset(new SliderAttachment(mValueTreeState, "gain", mGainSlider));
 
-    addAndMakeVisible(mLevelLabel);
-    mLevelLabel.attachToComponent(&mLevelSlider, false);
-    mLevelLabel.setJustificationType(juce::Justification::centred);
-    mLevelLabel.setText("Level", juce::NotificationType::dontSendNotification);
+    setSize(paramSliderWidth + paramLabelWidth, juce::jmax(100, paramControlHeight * 2));
 
-    addAndMakeVisible(mGainLabel);
-    mGainLabel.attachToComponent(&mGainSlider, false);
-    mGainLabel.setJustificationType(juce::Justification::centred);
-    mGainLabel.setText("Gain", juce::NotificationType::dontSendNotification);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
@@ -41,27 +26,16 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 //==============================================================================
 void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 }
 
 void AudioPluginAudioProcessorEditor::resized()
 {
-    auto area = getBounds().reduced(10);
+    auto r = getLocalBounds();
 
-    auto LevelSliderArea = area.removeFromLeft(getWidth() / 2);
-    auto LevelLabelArea = LevelSliderArea.removeFromTop(LevelSliderArea.getHeight() / 4);
-    mLevelSlider.setBounds(LevelSliderArea);
-    mLevelLabel.setBounds(LevelLabelArea);
+    auto gainRect = r.removeFromTop(paramControlHeight);
+    mGainLabel.setBounds(gainRect.removeFromLeft(paramLabelWidth));
+    mGainSlider.setBounds(gainRect);
 
-    auto GainSliderArea = area;
-    auto GainLabelArea = GainSliderArea.removeFromTop(GainSliderArea.getHeight() / 4);
-    mGainSlider.setBounds(GainSliderArea);
-    mGainLabel.setBounds(GainLabelArea);
 }
 
-void AudioPluginAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
-{
-    if (slider == &mLevelSlider)
-        processorRef.mGain = slider->getValue() / 100.0f;
-}
