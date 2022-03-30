@@ -2,6 +2,8 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+#include "ThunderdriveProcessor.h"
+
 //==============================================================================
 class AudioPluginAudioProcessor  : public juce::AudioProcessor
 {
@@ -45,10 +47,11 @@ public:
 private:
 
     juce::AudioProcessorValueTreeState mParameters;
-    float mPreviousGain;
 
     std::atomic<float>* mGainParameter = nullptr;
     std::atomic<float>* mDriveParameter = nullptr;
+
+    ThunderdriveProcessor mThunderdrive;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)

@@ -137,9 +137,8 @@ bool AudioPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layou
 }
 
 void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
-                                              juce::MidiBuffer& midiMessages)
+                                              juce::MidiBuffer&)
 {
-    juce::ignoreUnused (midiMessages);
 
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
@@ -152,16 +151,15 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
 
-    float currentGain = *mGainParameter;
+    mThunderdrive.setParam(ThunderdriveProcessor::Param_t::kGain, *mGainParameter);
+    mThunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, *mDriveParameter);
+
     for (int channel = 0; channel < totalNumOutputChannels; channel++)
     {
         int actualInputChannel = channel % totalNumInputChannels;
         const float* inBuffer = buffer.getReadPointer(actualInputChannel);
         float* outBuffer = buffer.getWritePointer(channel);
-        for (int sample = 0; sample < buffer.getNumSamples(); sample++)
-        {
-            outBuffer[sample] = currentGain * inBuffer[sample];
-        }
+        mThunderdrive.process(outBuffer, inBuffer, buffer.getNumSamples());
     }
 }
 
