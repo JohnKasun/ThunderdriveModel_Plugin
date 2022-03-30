@@ -76,6 +76,8 @@ juce_add_console_app(TestingTarget
 
 target_sources(Thunderdrive
     PRIVATE
+        src/ThunderdriveProcessor.h
+        src/ThunderdriveProcessor.cpp
         src/PluginProcessor.h
         src/PluginEditor.h
         src/PluginEditor.cpp
