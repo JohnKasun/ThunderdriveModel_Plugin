@@ -85,7 +85,10 @@ target_sources(Thunderdrive
 
 target_sources(TestingTarget
     PRIVATE
-        src/testing/main.cpp)
+        src/testing/main.cpp
+        src/testing/testThunderdriveProcessor.cpp
+        src/ThunderdriveProcessor.cpp
+        src/ThunderdriveProcessor.h)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use

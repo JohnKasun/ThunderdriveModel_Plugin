@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <limits>
+#include "ErrorDef.h"
 
 class ThunderdriveProcessor
 {
@@ -18,22 +19,29 @@ public:
 	ThunderdriveProcessor();
 	~ThunderdriveProcessor();
 
-	void setParam(ThunderdriveProcessor::Param_t param, float value);
+	Error_t setParam(ThunderdriveProcessor::Param_t param, float value);
 	float getParam(ThunderdriveProcessor::Param_t param) const;
 
-	void process(float* outBuffer, const float* inBuffer, int iNumSamples) const;
+	Error_t process(float* outBuffer, const float* inBuffer, int iNumSamples) const;
 
 private:
 
 	float mParamValues[ThunderdriveProcessor::kNumParams];
 	float mParamRanges[ThunderdriveProcessor::kNumParams][2];
-	float mR1Ranges[2];
 
 	bool isParamInRange(ThunderdriveProcessor::Param_t param, float value) const;
+
+	void applyInputGain(float& value) const;
 	void applyDiodeClipping(float& value) const;
 
-	const float mR2 = 2400.0f;
-	const float mDiodeMax = 0.591f;
-	const float mDiodeCutoff = 0.325f;
+	// Raw circuitry values
+	const float mR1RangesInOhms[2]{ 0, 14925 };
+	const float mR2InOhms = 2400.0f;
+	const float mInputMaxVoltage = 0.120f;
+	const float mDiodeMaxVoltage = 0.591f;
+	const float mDiodeCutoffVoltage = 0.325f;
 
+	// Circuitry values converted to gain format
+	const float mDiodeMaxGain = mDiodeMaxVoltage / mInputMaxVoltage;
+	const float mDiodeCutoffGain = mDiodeCutoffVoltage / mInputMaxVoltage;
 };

@@ -159,7 +159,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         int actualInputChannel = channel % totalNumInputChannels;
         const float* inBuffer = buffer.getReadPointer(actualInputChannel);
         float* outBuffer = buffer.getWritePointer(channel);
-        mThunderdrive.process(outBuffer, inBuffer, buffer.getNumSamples());
+        assert(mThunderdrive.process(outBuffer, inBuffer, buffer.getNumSamples()) == Error_t::kNoError);
     }
 }
 
