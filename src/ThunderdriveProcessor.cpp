@@ -10,11 +10,11 @@ ThunderdriveProcessor::ThunderdriveProcessor()
 	mParamRanges[ThunderdriveProcessor::kGain][1] = 1.0f;
 	mParamRanges[ThunderdriveProcessor::kDrive][0] = 0.0f;
 	mParamRanges[ThunderdriveProcessor::kDrive][1] = 1.0f;
-
 }
 
 ThunderdriveProcessor::~ThunderdriveProcessor()
 {
+
 }
 
 Error_t ThunderdriveProcessor::setParam(ThunderdriveProcessor::Param_t param, float value)
@@ -40,11 +40,6 @@ Error_t ThunderdriveProcessor::process(float* outBuffer, const float* inBuffer, 
 		applyInputGain(currentValue);
 		applyDiodeClipping(currentValue);
 
-		// Normalize between -1 and 1
-		currentValue /= mDiodeMaxGain;
-
-		assert(abs(currentValue) <= 1.0f);
-
 		outBuffer[sample] = mParamValues[ThunderdriveProcessor::kGain] * currentValue;
 	}
 	return Error_t::kNoError;
@@ -64,14 +59,10 @@ void ThunderdriveProcessor::applyInputGain(float& value) const
 
 void ThunderdriveProcessor::applyDiodeClipping(float& value) const
 {
-	if (abs(value) > mInputMaxGain)
+	if (abs(value) > mDiodeCutoffGain)
 	{
 		float phase = (value < 0) ? -1.0f : 1.0f;
-		value = phase * mDiodeMaxGain;
-	}
-	else if (value > mDiodeCutoffGain)
-	{
-		value = static_cast<float>(-0.8727 * pow(value, 2) + 1.4249 * value - 0.0444);
+		value = (0.0238 * value + phase * 2.6437);
 	}
 }
 

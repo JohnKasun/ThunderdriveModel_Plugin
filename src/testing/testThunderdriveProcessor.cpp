@@ -4,6 +4,7 @@
 #include "../src/ThunderdriveProcessor.h"
 #include "Synthesis.h"
 #include "Util.h"
+#include <fstream>
 
 void CHECK_ARRAY_CLOSE(float* buffer1, float* buffer2, int iNumSamples, float tolerance = 0)
 {
@@ -57,7 +58,7 @@ TEST_CASE("Processes Correctly", "[Thunderdrive]")
 	SECTION("Below-Threshold Input Stays Unchanged")
 	{
 
-		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 0.5);
+		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 0);
 		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kGain, 1);
 
 		CSynthesis::generateDc(groundBuffer, iNumSamples, 0.5);
@@ -66,6 +67,26 @@ TEST_CASE("Processes Correctly", "[Thunderdrive]")
 		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
 
 		CHECK_ARRAY_CLOSE(outBuffer, groundBuffer, iNumSamples, 0);
+	}
+
+	SECTION("Print Sinusoid")
+	{
+		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 1);
+		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kGain, 1);
+
+		CSynthesis::generateSine(inBuffer, 440, 44100, iNumSamples);
+		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
+
+		std::ofstream out_file;
+		out_file.open("C:/Users/JohnK/Desktop/out.txt");
+		REQUIRE(out_file);
+
+		for (int i = 0; i < iNumSamples; i++)
+		{
+			out_file << outBuffer[i] << std::endl;
+		}
+
+		out_file.close();
 	}
 
 	delete[] inBuffer;
