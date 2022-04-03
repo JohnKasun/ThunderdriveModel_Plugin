@@ -72,10 +72,10 @@ TEST_CASE("Processes Correctly", "[Thunderdrive]")
 	SECTION("Print Sinusoid")
 	{
 		std::ofstream drive1, drive2, drive3, drive4;
-		drive1.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/drive1.txt");
-		drive2.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/drive2.txt");
-		drive3.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/drive3.txt");
-		drive4.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/drive4.txt");
+		drive1.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/GeneratedData/drive1.txt");
+		drive2.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/GeneratedData/drive2.txt");
+		drive3.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/GeneratedData/drive3.txt");
+		drive4.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/GeneratedData/drive4.txt");
 		REQUIRE(drive1);
 		REQUIRE(drive2);
 		REQUIRE(drive3);

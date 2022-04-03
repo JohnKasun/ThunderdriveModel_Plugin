@@ -1,7 +1,7 @@
-drive1 = load("drive1.txt");
-drive2 = load("drive2.txt");
-drive3 = load("drive3.txt");
-drive4 = load("drive4.txt");
+drive1 = load("GeneratedData/drive1.txt");
+drive2 = load("GeneratedData/drive2.txt");
+drive3 = load("GeneratedData/drive3.txt");
+drive4 = load("GeneratedData/drive4.txt");
 
 subplot(2,2,1);
 plot(drive1);
