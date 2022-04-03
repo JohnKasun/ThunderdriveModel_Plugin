@@ -81,40 +81,32 @@ TEST_CASE("Processes Correctly", "[Thunderdrive]")
 		REQUIRE(drive3);
 		REQUIRE(drive4);
 
+		auto print = [](std::ofstream& file, const float* buffer, const int iNumSamples)
+		{
+			for (int i = 0; i < iNumSamples; i++)
+			{
+				file << buffer[i] << std::endl;
+			}
+		};
+
 		CSynthesis::generateSine(inBuffer, 440, 44100, iNumSamples);
 		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kGain, 1);
 
 		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 0);
 		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
-
-		for (int i = 0; i < iNumSamples; i++)
-		{
-			drive1 << outBuffer[i] << std::endl;
-		}
+		print(drive1, outBuffer, iNumSamples);
 
 		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 0.33);
 		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
-
-		for (int i = 0; i < iNumSamples; i++)
-		{
-			drive2 << outBuffer[i] << std::endl;
-		}
+		print(drive2, outBuffer, iNumSamples);
 
 		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 0.66);
 		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
-
-		for (int i = 0; i < iNumSamples; i++)
-		{
-			drive3 << outBuffer[i] << std::endl;
-		}
+		print(drive3, outBuffer, iNumSamples);
 
 		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 1);
 		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
-
-		for (int i = 0; i < iNumSamples; i++)
-		{
-			drive4 << outBuffer[i] << std::endl;
-		}
+		print(drive4, outBuffer, iNumSamples);
 
 		drive1.close();
 		drive2.close();
