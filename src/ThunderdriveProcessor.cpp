@@ -64,14 +64,14 @@ void ThunderdriveProcessor::applyInputGain(float& value) const
 
 void ThunderdriveProcessor::applyDiodeClipping(float& value) const
 {
-	if (abs(value) > mDiodeMaxGain)
+	if (abs(value) > mInputMaxGain)
 	{
 		float phase = (value < 0) ? -1.0f : 1.0f;
 		value = phase * mDiodeMaxGain;
 	}
 	else if (value > mDiodeCutoffGain)
 	{
-		value *= 0.75;
+		value = static_cast<float>(-0.8727 * pow(value, 2) + 1.4249 * value - 0.0444);
 	}
 }
 

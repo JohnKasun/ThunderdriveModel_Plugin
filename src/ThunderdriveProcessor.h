@@ -42,6 +42,7 @@ private:
 	const float mDiodeCutoffVoltage = 0.325f;
 
 	// Circuitry values converted to gain format
+	const float mInputMaxGain = 0.8f;
 	const float mDiodeMaxGain = mDiodeMaxVoltage / mInputMaxVoltage;
 	const float mDiodeCutoffGain = mDiodeCutoffVoltage / mInputMaxVoltage;
 };
