@@ -71,22 +71,55 @@ TEST_CASE("Processes Correctly", "[Thunderdrive]")
 
 	SECTION("Print Sinusoid")
 	{
-		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 1);
-		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kGain, 1);
+		std::ofstream drive1, drive2, drive3, drive4;
+		drive1.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/drive1.txt");
+		drive2.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/drive2.txt");
+		drive3.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/drive3.txt");
+		drive4.open("C:/Users/JohnK/Desktop/ECE4803/ThunderdriveModel/data/drive4.txt");
+		REQUIRE(drive1);
+		REQUIRE(drive2);
+		REQUIRE(drive3);
+		REQUIRE(drive4);
 
 		CSynthesis::generateSine(inBuffer, 440, 44100, iNumSamples);
-		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
+		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kGain, 1);
 
-		std::ofstream out_file;
-		out_file.open("C:/Users/JohnK/Desktop/out.txt");
-		REQUIRE(out_file);
+		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 0);
+		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
 
 		for (int i = 0; i < iNumSamples; i++)
 		{
-			out_file << outBuffer[i] << std::endl;
+			drive1 << outBuffer[i] << std::endl;
 		}
 
-		out_file.close();
+		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 0.33);
+		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
+
+		for (int i = 0; i < iNumSamples; i++)
+		{
+			drive2 << outBuffer[i] << std::endl;
+		}
+
+		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 0.66);
+		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
+
+		for (int i = 0; i < iNumSamples; i++)
+		{
+			drive3 << outBuffer[i] << std::endl;
+		}
+
+		thunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, 1);
+		thunderdrive.process(outBuffer, inBuffer, iNumSamples);
+
+		for (int i = 0; i < iNumSamples; i++)
+		{
+			drive4 << outBuffer[i] << std::endl;
+		}
+
+		drive1.close();
+		drive2.close();
+		drive3.close();
+		drive4.close();
 	}
 
 	delete[] inBuffer;
