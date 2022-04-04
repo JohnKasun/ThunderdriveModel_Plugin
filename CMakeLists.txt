@@ -18,6 +18,7 @@ cmake_minimum_required(VERSION 3.15)
 project(AUDIO_PLUGIN_EXAMPLE VERSION 0.0.1)
 
 include_directories(catch2)
+include_directories(inc)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
@@ -76,19 +77,17 @@ juce_add_console_app(TestingTarget
 
 target_sources(Thunderdrive
     PRIVATE
-        src/ThunderdriveProcessor.h
         src/ThunderdriveProcessor.cpp
-        src/PluginProcessor.h
-        src/PluginEditor.h
         src/PluginEditor.cpp
-        src/PluginProcessor.cpp)
+        src/PluginProcessor.cpp
+        src/SimpleFilter.cpp)
 
 target_sources(TestingTarget
     PRIVATE
         src/testing/main.cpp
         src/testing/testThunderdriveProcessor.cpp
         src/ThunderdriveProcessor.cpp
-        src/ThunderdriveProcessor.h)
+        src/SimpleFilter.cpp)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use

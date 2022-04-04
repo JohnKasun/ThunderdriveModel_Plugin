@@ -1,7 +1,7 @@
 #pragma once
 
 #include "catch.hpp"
-#include "../src/ThunderdriveProcessor.h"
+#include "ThunderdriveProcessor.h"
 #include "Synthesis.h"
 #include "Util.h"
 #include <fstream>
