@@ -11,18 +11,21 @@ SimpleFilterIf::~SimpleFilterIf()
 	reset();
 }
 
-Error_t SimpleFilterIf::init(SimpleFilterIf::FilterType filterType)
+Error_t SimpleFilterIf::init(SimpleFilterIf::FilterType filterType, float sampleRate)
 {
 	if (mFilter)
 		return Error_t::kMemError;
 
+	if (sampleRate <= 0)
+		return Error_t::kFunctionInvalidArgsError;
+
 	switch (filterType)
 	{
 	case FilterType::kLowPass:
-		mFilter = new SimpleLowPass();
+		mFilter = new SimpleLowPass(sampleRate);
 		break;
 	case FilterType::kHighPass:
-		mFilter = new SimpleHighPass();
+		mFilter = new SimpleHighPass(sampleRate);
 		break;
 	default:
 		return Error_t::kFunctionInvalidArgsError;
@@ -35,12 +38,12 @@ Error_t SimpleFilterIf::init(SimpleFilterIf::FilterType filterType)
 
 Error_t SimpleFilterIf::reset()
 {
-	if (!mFilter)
-		return Error_t::kMemError;
-
-	delete mFilter;
-	mFilter = nullptr;
-	mFilterType = FilterType::kUninitialized;
+	if (mFilter)
+	{
+		delete mFilter;
+		mFilter = nullptr;
+		mFilterType = FilterType::kUninitialized;
+	}
 
 	return Error_t::kNoError;
 }

@@ -25,7 +25,7 @@ public:
 	SimpleFilterIf();
 	~SimpleFilterIf();
 
-	Error_t init(SimpleFilterIf::FilterType filterType);
+	Error_t init(SimpleFilterIf::FilterType filterType, float sampleRate);
 	Error_t reset();
 
 	Error_t setParam(SimpleFilterIf::FilterParam filterParam, float value);

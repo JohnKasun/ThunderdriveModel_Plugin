@@ -14,12 +14,31 @@ ThunderdriveProcessor::ThunderdriveProcessor()
 	mParamRanges[ThunderdriveProcessor::kTone][0] = 0.0f;
 	mParamRanges[ThunderdriveProcessor::kTone][1] = 0.99f;
 
-	mFilter.init(SimpleFilterIf::FilterType::kLowPass);
 }
 
 ThunderdriveProcessor::~ThunderdriveProcessor()
 {
+	reset();
+}
+
+Error_t ThunderdriveProcessor::init(float sampleRate)
+{
+	if (sampleRate <= 0)
+		return Error_t::kFunctionInvalidArgsError;
+
+	mSampleRate = sampleRate;
+	return mFilter.init(SimpleFilterIf::FilterType::kLowPass, sampleRate);
+}
+
+Error_t ThunderdriveProcessor::reset()
+{
+	for (int i = 0; i < Param_t::kNumParams; i++)
+		mParamValues[i] = 0;
+
+	mSampleRate = 1.0f;
 	mFilter.reset();
+
+	return Error_t::kNoError;
 }
 
 Error_t ThunderdriveProcessor::setParam(ThunderdriveProcessor::Param_t param, float value)

@@ -12,9 +12,9 @@ TEST_CASE("Init and Reset", "[SimpleFilter]")
 	REQUIRE(simpleFilter.reset() == Error_t::kMemError);
 	REQUIRE(simpleFilter.process(0) == 0);
 
-	REQUIRE(simpleFilter.init(SimpleFilterIf::FilterType::kLowPass) == Error_t::kNoError);
+	REQUIRE(simpleFilter.init(SimpleFilterIf::FilterType::kLowPass, 44100) == Error_t::kNoError);
 
-	REQUIRE(simpleFilter.init(SimpleFilterIf::FilterType::kHighPass) == Error_t::kMemError);
+	REQUIRE(simpleFilter.init(SimpleFilterIf::FilterType::kHighPass, 44100) == Error_t::kMemError);
 
 	REQUIRE(simpleFilter.getFilterType() == SimpleFilterIf::FilterType::kLowPass);
 	
@@ -25,7 +25,7 @@ TEST_CASE("LowPass Output", "[SimpleFilter]")
 {
 	SimpleFilterIf filter;
 
-	filter.init(SimpleFilterIf::FilterType::kLowPass);
+	filter.init(SimpleFilterIf::FilterType::kLowPass, 44100);
 	
 	int result[] = { 1,1,1,1,1,1,1 };
 	int input[] = { 1,2,3,4,5,6,7 };

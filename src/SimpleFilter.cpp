@@ -1,6 +1,7 @@
 #include "SimpleFilter.h"
 
-SimpleFilter::SimpleFilter()
+SimpleFilter::SimpleFilter(float sampleRate) :
+	mSampleRate(sampleRate)
 {
 
 	for (int i = 0; i < SimpleFilterIf::kNumFilterParams; i++)

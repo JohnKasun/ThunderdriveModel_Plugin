@@ -9,8 +9,8 @@ class SimpleFilter
 {
 public:
 
-	SimpleFilter();
-	~SimpleFilter();
+	SimpleFilter(float sampleRate);
+	virtual ~SimpleFilter();
 
 	Error_t setParam(SimpleFilterIf::FilterParam filterParam, float value);
 	float getParam(SimpleFilterIf::FilterParam filterParam) const;
@@ -27,11 +27,16 @@ protected:
 
 	bool isInParamRange(SimpleFilterIf::FilterParam, float value) const;
 
+	float mSampleRate = 1.0f;
+
 };
 
 class SimpleLowPass : public SimpleFilter
 {
 public:
+
+	SimpleLowPass(float sampleRate) : SimpleFilter(sampleRate) {};
+	~SimpleLowPass() = default;
 
 	float process(float in) override;
 };
@@ -39,6 +44,9 @@ public:
 class SimpleHighPass : public SimpleFilter
 {
 public:
+
+	SimpleHighPass(float sampleRate) : SimpleFilter(sampleRate) {};
+	~SimpleHighPass() = default;
 
 	float process(float in) override;
 		

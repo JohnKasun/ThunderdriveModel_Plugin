@@ -21,6 +21,9 @@ public:
 	ThunderdriveProcessor();
 	~ThunderdriveProcessor();
 
+	Error_t init(float sampleRate);
+	Error_t reset();
+
 	Error_t setParam(ThunderdriveProcessor::Param_t param, float value);
 	float getParam(ThunderdriveProcessor::Param_t param) const;
 
@@ -28,8 +31,6 @@ public:
 
 private:
 
-	int mNumChannels = 0;
-	float mSampleRate = 1.0;
 	float mParamValues[ThunderdriveProcessor::kNumParams];
 	float mParamRanges[ThunderdriveProcessor::kNumParams][2];
 
@@ -50,5 +51,6 @@ private:
 	const float mDiodeMaxGain = mDiodeMaxVoltage / mInputMaxVoltage;
 	const float mDiodeCutoffGain = mDiodeCutoffVoltage / mInputMaxVoltage;
 
+	float mSampleRate = 1.0;
 	SimpleFilterIf mFilter;
 };
