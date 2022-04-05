@@ -10,11 +10,13 @@ ThunderdriveProcessor::ThunderdriveProcessor()
 	mParamRanges[ThunderdriveProcessor::kGain][1] = 1.0f;
 	mParamRanges[ThunderdriveProcessor::kDrive][0] = 0.0f;
 	mParamRanges[ThunderdriveProcessor::kDrive][1] = 1.0f;
+
+	mFilter.init(SimpleFilterIf::FilterType::kHighpass);
 }
 
 ThunderdriveProcessor::~ThunderdriveProcessor()
 {
-
+	mFilter.reset();
 }
 
 Error_t ThunderdriveProcessor::setParam(ThunderdriveProcessor::Param_t param, float value)
@@ -31,7 +33,7 @@ float ThunderdriveProcessor::getParam(ThunderdriveProcessor::Param_t param) cons
 	return mParamValues[param];
 }
 
-Error_t ThunderdriveProcessor::process(float* outBuffer, const float* inBuffer, int iNumSamples) const
+Error_t ThunderdriveProcessor::process(float* outBuffer, const float* inBuffer, int iNumSamples)
 {
 	for (int sample = 0; sample < iNumSamples; sample++)
 	{
@@ -39,11 +41,13 @@ Error_t ThunderdriveProcessor::process(float* outBuffer, const float* inBuffer, 
 
 		applyInputGain(currentValue);
 		applyDiodeClipping(currentValue);
+		currentValue = mFilter.process(currentValue);
 
 		outBuffer[sample] = mParamValues[ThunderdriveProcessor::kGain] * currentValue;
 	}
 	return Error_t::kNoError;
 }
+
  
 bool ThunderdriveProcessor::isParamInRange(ThunderdriveProcessor::Param_t param, float value) const
 {

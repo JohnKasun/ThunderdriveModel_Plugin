@@ -101,15 +101,12 @@ void AudioPluginAudioProcessor::changeProgramName (int index, const juce::String
 //==============================================================================
 void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
-    juce::ignoreUnused (sampleRate, samplesPerBlock);
+
 }
 
 void AudioPluginAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
+
 }
 
 bool AudioPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
@@ -153,13 +150,17 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     mThunderdrive.setParam(ThunderdriveProcessor::Param_t::kGain, *mGainParameter);
     mThunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, *mDriveParameter);
 
-    for (int channel = 0; channel < totalNumOutputChannels; channel++)
-    {
-        int actualInputChannel = channel % totalNumInputChannels;
-        const float* inBuffer = buffer.getReadPointer(actualInputChannel);
-        float* outBuffer = buffer.getWritePointer(channel);
-        assert(mThunderdrive.process(outBuffer, inBuffer, buffer.getNumSamples()) == Error_t::kNoError);
-    }
+    mThunderdrive.process(buffer.getWritePointer(0), buffer.getReadPointer(0), buffer.getNumSamples());
+    for (int c = 1; c < totalNumOutputChannels; c++)
+        buffer.copyFrom(c, 0, buffer.getReadPointer(0), buffer.getNumSamples());
+
+    //for (int channel = 0; channel < totalNumOutputChannels; channel++)
+    //{
+    //    int actualInputChannel = channel % totalNumInputChannels;
+    //    const float* inBuffer = buffer.getReadPointer(actualInputChannel);
+    //    float* outBuffer = buffer.getWritePointer(channel);
+    //    assert(mThunderdrive.process(outBuffer, inBuffer, buffer.getNumSamples()) == Error_t::kNoError);
+    //}
 }
 
 //==============================================================================
