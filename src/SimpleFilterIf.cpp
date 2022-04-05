@@ -18,11 +18,14 @@ Error_t SimpleFilterIf::init(SimpleFilterIf::FilterType filterType)
 
 	switch (filterType)
 	{
-	case FilterType::kLowpass:
+	case FilterType::kLowPass:
 		mFilter = new SimpleLowPass();
 		break;
-	default:
+	case FilterType::kHighPass:
 		mFilter = new SimpleHighPass();
+		break;
+	default:
+		return Error_t::kFunctionInvalidArgsError;
 	}
 
 	mFilterType = filterType;
@@ -37,7 +40,7 @@ Error_t SimpleFilterIf::reset()
 
 	delete mFilter;
 	mFilter = nullptr;
-	mFilterType = FilterType::kNoFilter;
+	mFilterType = FilterType::kUninitialized;
 
 	return Error_t::kNoError;
 }
@@ -52,6 +55,9 @@ Error_t SimpleFilterIf::setParam(SimpleFilterIf::FilterParam filterParam, float 
 
 float SimpleFilterIf::getParam(SimpleFilterIf::FilterParam filterParam) const
 {
+	if (!mFilter)
+		return 0;
+
 	return mFilter->getParam(filterParam);
 }
 

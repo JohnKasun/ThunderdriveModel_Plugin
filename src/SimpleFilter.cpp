@@ -9,6 +9,9 @@ SimpleFilter::SimpleFilter()
 	mParamRanges[SimpleFilterIf::FilterParam::kCutoff][0] = 0;
 	mParamRanges[SimpleFilterIf::FilterParam::kCutoff][1] = 20000;
 
+	mInputDelayLine.setWriteIdx(1);
+	mOutputDelayLine.setWriteIdx(1);
+
 }
 
 SimpleFilter::~SimpleFilter()
@@ -36,22 +39,20 @@ bool SimpleFilter::isInParamRange(SimpleFilterIf::FilterParam filterParam, float
 
 float SimpleLowPass::process(float in)
 {
-	float prevIn = mInputDelayLine.getPostInc();
-	float out	 = in - prevIn;
+	float prevOut = mOutputDelayLine.getPostInc();
+	float out = 0.99 * prevOut + (1 - 0.99) * in;
 
-	mInputDelayLine.putPostInc(in);
+	mOutputDelayLine.putPostInc(out);
 
 	return out;
 }
 
 float SimpleHighPass::process(float in)
 {
-	float prevIn  = mInputDelayLine.getPostInc();
-	float prevOut = mOutputDelayLine.getPostInc();
-	float out = in - prevIn + prevOut;
+	float prevIn = mInputDelayLine.getPostInc();
+	float out = in - prevIn;
 
 	mInputDelayLine.putPostInc(in);
-	mOutputDelayLine.putPostInc(out);
 
 	return out;
 }

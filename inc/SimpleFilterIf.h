@@ -1,81 +1,43 @@
 #pragma once
 
-#include "SimpleFilter.h"
+#include "ErrorDef.h"
+
+class SimpleFilter;
 
 class SimpleFilterIf
 {
 public:
 	enum FilterType {
-		kLowpass,
-		kHighpass,
+		kLowPass,
+		kHighPass,
 
 		kNumFilterTypes,
 
-		kNoFilter
+		kUninitialized
 	};
 
-	SimpleFilterIf() {}
+	enum FilterParam {
+		kCutoff,
 
-	~SimpleFilterIf()
-	{
-		reset();
-	}
+		kNumFilterParams
+	};
 
-	Error_t init(SimpleFilterIf::FilterType filterType)
-	{
-		if (mFilter)
-			return Error_t::kMemError;
+	SimpleFilterIf();
+	~SimpleFilterIf();
 
-		switch (filterType)
-		{
-		case FilterType::kLowpass:
-			mFilter = new SimpleLowPass();
-			break;
-		default:
-			mFilter = new SimpleHighPass();
-		}
+	Error_t init(SimpleFilterIf::FilterType filterType);
+	Error_t reset();
 
-		return Error_t::kNoError;
-	}
+	Error_t setParam(SimpleFilterIf::FilterParam filterParam, float value);
+	float getParam(SimpleFilterIf::FilterParam filterParam) const;
 
-	Error_t reset()
-	{
-		delete mFilter;
-		mFilter = nullptr;
-		mFilterType = FilterType::kNoFilter;
+	FilterType getFilterType() const;
 
-		return Error_t::kNoError;
-	}
-
-	Error_t setParam(SimpleFilter::FilterParam filterParam, float value)
-	{
-		if (!mFilter)
-			return Error_t::kMemError;
-
-		return mFilter->setParam(filterParam, value);
-	}
-
-	float getParam(SimpleFilter::FilterParam filterParam) const
-	{
-		return mFilter->getParam(filterParam);
-	}
-
-	FilterType getFilterType() const
-	{
-		return mFilterType;
-	}
-
-	float process(float in)
-	{
-		if (!mFilter)
-			return 0;
-
-		return mFilter->process(in);
-	}
+	float process(float in);
 
 private:
 
-	FilterType mFilterType = FilterType::kNoFilter;
+	FilterType mFilterType = FilterType::kUninitialized;
 	SimpleFilter* mFilter = nullptr;
 
 };

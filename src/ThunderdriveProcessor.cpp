@@ -11,7 +11,7 @@ ThunderdriveProcessor::ThunderdriveProcessor()
 	mParamRanges[ThunderdriveProcessor::kDrive][0] = 0.0f;
 	mParamRanges[ThunderdriveProcessor::kDrive][1] = 1.0f;
 
-	mFilter.init(SimpleFilterIf::FilterType::kHighpass);
+	mFilter.init(SimpleFilterIf::FilterType::kLowpass);
 }
 
 ThunderdriveProcessor::~ThunderdriveProcessor()

@@ -27,6 +27,8 @@ public:
 
 private:
 
+	int mNumChannels = 0;
+	float mSampleRate = 1.0;
 	float mParamValues[ThunderdriveProcessor::kNumParams];
 	float mParamRanges[ThunderdriveProcessor::kNumParams][2];
 
