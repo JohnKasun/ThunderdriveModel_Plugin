@@ -35,6 +35,10 @@ private:
     juce::Slider mDriveSlider;
     std::unique_ptr<SliderAttachment> mDriveAttachment;
 
+    juce::Label mToneLabel;
+    juce::Slider mToneSlider;
+    std::unique_ptr<SliderAttachment> mToneAttachment;
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     AudioPluginAudioProcessor& processorRef;

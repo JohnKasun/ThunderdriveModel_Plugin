@@ -50,6 +50,7 @@ private:
 
     std::atomic<float>* mGainParameter = nullptr;
     std::atomic<float>* mDriveParameter = nullptr;
+    std::atomic<float>* mToneParameter = nullptr;
 
     ThunderdriveProcessor mThunderdrive;
 

@@ -21,7 +21,13 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     addAndMakeVisible(mDriveSlider);
     mDriveAttachment.reset(new SliderAttachment(mValueTreeState, "drive", mDriveSlider));
 
-    setSize(paramSliderWidth + paramLabelWidth, juce::jmax(100, paramControlHeight * 2));
+    mToneLabel.setText("Tone", juce::dontSendNotification);
+    addAndMakeVisible(mToneLabel);
+
+    addAndMakeVisible(mToneSlider);
+    mToneAttachment.reset(new SliderAttachment(mValueTreeState, "tone", mToneSlider));
+
+    setSize(paramSliderWidth + paramLabelWidth, juce::jmax(100, paramControlHeight * 3));
 
 }
 
@@ -43,9 +49,13 @@ void AudioPluginAudioProcessorEditor::resized()
     mGainLabel.setBounds(gainRect.removeFromLeft(paramLabelWidth));
     mGainSlider.setBounds(gainRect);
 
-    auto driveRect = r;
+    auto driveRect = r.removeFromTop(paramControlHeight);
     mDriveLabel.setBounds(driveRect.removeFromLeft(paramLabelWidth));
     mDriveSlider.setBounds(driveRect);
+
+    auto toneRect = r;
+    mToneLabel.setBounds(toneRect.removeFromLeft(paramLabelWidth));
+    mToneSlider.setBounds(toneRect);
 
 }
 

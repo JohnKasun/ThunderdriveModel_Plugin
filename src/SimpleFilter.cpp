@@ -40,7 +40,7 @@ bool SimpleFilter::isInParamRange(SimpleFilterIf::FilterParam filterParam, float
 float SimpleLowPass::process(float in)
 {
 	float prevOut = mOutputDelayLine.getPostInc();
-	float out = 0.99 * prevOut + (1 - 0.99) * in;
+	float out = mParamValues[SimpleFilterIf::FilterParam::kCutoff] * prevOut + (1 - mParamValues[SimpleFilterIf::FilterParam::kCutoff]) * in;
 
 	mOutputDelayLine.putPostInc(out);
 
@@ -50,7 +50,7 @@ float SimpleLowPass::process(float in)
 float SimpleHighPass::process(float in)
 {
 	float prevIn = mInputDelayLine.getPostInc();
-	float out = in - prevIn;
+	float out = in - mParamValues[SimpleFilterIf::FilterParam::kCutoff] * prevIn;
 
 	mInputDelayLine.putPostInc(in);
 

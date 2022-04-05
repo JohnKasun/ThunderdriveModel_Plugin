@@ -5,13 +5,16 @@ ThunderdriveProcessor::ThunderdriveProcessor()
 
 	mParamValues[ThunderdriveProcessor::kGain] = 0.5f;
 	mParamValues[ThunderdriveProcessor::kDrive] = 0.0f;
+	mParamValues[ThunderdriveProcessor::kTone] = 0.0f;
 
 	mParamRanges[ThunderdriveProcessor::kGain][0] = 0.0f;
 	mParamRanges[ThunderdriveProcessor::kGain][1] = 1.0f;
 	mParamRanges[ThunderdriveProcessor::kDrive][0] = 0.0f;
 	mParamRanges[ThunderdriveProcessor::kDrive][1] = 1.0f;
+	mParamRanges[ThunderdriveProcessor::kTone][0] = 0.0f;
+	mParamRanges[ThunderdriveProcessor::kTone][1] = 0.99f;
 
-	mFilter.init(SimpleFilterIf::FilterType::kLowpass);
+	mFilter.init(SimpleFilterIf::FilterType::kLowPass);
 }
 
 ThunderdriveProcessor::~ThunderdriveProcessor()
@@ -25,6 +28,9 @@ Error_t ThunderdriveProcessor::setParam(ThunderdriveProcessor::Param_t param, fl
 		return Error_t::kFunctionInvalidArgsError;
 
 	mParamValues[param] = value;
+	if (param == Param_t::kTone)
+		return mFilter.setParam(SimpleFilterIf::FilterParam::kCutoff, value);
+
 	return Error_t::kNoError;
 }
 

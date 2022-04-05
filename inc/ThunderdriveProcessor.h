@@ -13,6 +13,7 @@ public:
 	{
 		kGain,
 		kDrive,
+		kTone,
 
 		kNumParams
 	};

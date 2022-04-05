@@ -22,11 +22,17 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                                                         "Drive",
                                                         0.0f,
                                                         1.0f,
-                                                        0.0f)
+                                                        0.0f),
+            std::make_unique<juce::AudioParameterFloat>("tone",
+                                                        "Tone",
+                                                        0.0f,
+                                                        0.99f,
+                                                        0.5f)
         })
 {
     mGainParameter = mParameters.getRawParameterValue("gain");
     mDriveParameter = mParameters.getRawParameterValue("drive");
+    mToneParameter = mParameters.getRawParameterValue("tone");
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -149,18 +155,12 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     mThunderdrive.setParam(ThunderdriveProcessor::Param_t::kGain, *mGainParameter);
     mThunderdrive.setParam(ThunderdriveProcessor::Param_t::kDrive, *mDriveParameter);
+    mThunderdrive.setParam(ThunderdriveProcessor::Param_t::kTone, *mToneParameter);
 
     mThunderdrive.process(buffer.getWritePointer(0), buffer.getReadPointer(0), buffer.getNumSamples());
     for (int c = 1; c < totalNumOutputChannels; c++)
         buffer.copyFrom(c, 0, buffer.getReadPointer(0), buffer.getNumSamples());
 
-    //for (int channel = 0; channel < totalNumOutputChannels; channel++)
-    //{
-    //    int actualInputChannel = channel % totalNumInputChannels;
-    //    const float* inBuffer = buffer.getReadPointer(actualInputChannel);
-    //    float* outBuffer = buffer.getWritePointer(channel);
-    //    assert(mThunderdrive.process(outBuffer, inBuffer, buffer.getNumSamples()) == Error_t::kNoError);
-    //}
 }
 
 //==============================================================================
