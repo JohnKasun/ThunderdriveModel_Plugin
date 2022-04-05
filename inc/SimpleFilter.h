@@ -14,7 +14,7 @@ public:
 	};
 
 	SimpleFilter();
-	~SimpleFilter();
+	virtual ~SimpleFilter();
 
 	Error_t setParam(SimpleFilter::FilterParam filterParam, float value);
 	float getParam(SimpleFilter::FilterParam filterParam) const;

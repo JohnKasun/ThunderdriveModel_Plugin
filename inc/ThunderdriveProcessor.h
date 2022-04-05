@@ -3,6 +3,7 @@
 #include <cassert>
 #include <limits>
 #include "ErrorDef.h"
+#include "SimpleFilterIf.h"
 
 class ThunderdriveProcessor
 {
@@ -22,7 +23,7 @@ public:
 	Error_t setParam(ThunderdriveProcessor::Param_t param, float value);
 	float getParam(ThunderdriveProcessor::Param_t param) const;
 
-	Error_t process(float* outBuffer, const float* inBuffer, int iNumSamples) const;
+	Error_t process(float* outBuffer, const float* inBuffer, int iNumSamples);
 
 private:
 
@@ -45,4 +46,6 @@ private:
 	const float mInputMaxGain = 0.8f;
 	const float mDiodeMaxGain = mDiodeMaxVoltage / mInputMaxVoltage;
 	const float mDiodeCutoffGain = mDiodeCutoffVoltage / mInputMaxVoltage;
+
+	SimpleFilterIf mFilter;
 };
