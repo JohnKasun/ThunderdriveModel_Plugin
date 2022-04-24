@@ -27,7 +27,7 @@ Error_t ThunderdriveProcessor::init(float sampleRate)
 		return Error_t::kFunctionInvalidArgsError;
 
 	mSampleRate = sampleRate;
-	return mFilter.init(SimpleFilterIf::FilterType::kLowPass, sampleRate);
+	return mFilter.init(SimpleFilterIf::FilterType::kHighPass, sampleRate);
 }
 
 Error_t ThunderdriveProcessor::reset()
@@ -64,8 +64,13 @@ Error_t ThunderdriveProcessor::process(float* outBuffer, const float* inBuffer, 
 	{
 		float currentValue = inBuffer[sample];
 
+		// Apply input gain from BJT
 		applyInputGain(currentValue);
+
+		// Apply distortion from diode stage
 		applyDiodeClipping(currentValue);
+
+		// Apply post distortion filter
 		currentValue = mFilter.process(currentValue);
 
 		outBuffer[sample] = mParamValues[ThunderdriveProcessor::kGain] * currentValue;
