@@ -15,10 +15,9 @@ cmake_minimum_required(VERSION 3.15)
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
 
-project(AUDIO_PLUGIN_EXAMPLE VERSION 0.0.1)
+project(ThunderdrivePlugin VERSION 0.0.1)
 
 include_directories(catch2)
-include_directories(inc)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
@@ -41,7 +40,7 @@ add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory
 # the formats specified by the FORMATS arguments. This function accepts many optional arguments.
 # Check the readme at `docs/CMake API.md` in the JUCE repo for the full list.
 
-juce_add_plugin(Thunderdrive
+juce_add_plugin(ThunderdrivePlugin
     # VERSION ...                               # Set this if the plugin version is different to the project version
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
@@ -75,23 +74,6 @@ juce_add_console_app(TestingTarget
 # Finally, we supply a list of source files that will be built into the target. This is a standard
 # CMake command.
 
-target_sources(Thunderdrive
-    PRIVATE
-        src/ThunderdriveProcessor.cpp
-        src/PluginEditor.cpp
-        src/PluginProcessor.cpp
-        src/SimpleFilter.cpp
-        src/SimpleFilterIf.cpp)
-
-target_sources(TestingTarget
-    PRIVATE
-        src/testing/main.cpp
-        src/testing/testThunderdriveProcessor.cpp
-        src/testing/testSimpleFilter.cpp
-        src/ThunderdriveProcessor.cpp
-        src/SimpleFilter.cpp
-        src/SimpleFilterIf.cpp)
-
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use
 # of compile definitions to switch certain features on/off, so if there's a particular feature you
@@ -99,7 +81,7 @@ target_sources(TestingTarget
 # definitions will be visible both to your code, and also the JUCE module code, so for new
 # definitions, pick unique names that are unlikely to collide! This is a standard CMake command.
 
-target_compile_definitions(Thunderdrive
+target_compile_definitions(ThunderdrivePlugin
     PUBLIC
         # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
         JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
@@ -126,7 +108,10 @@ target_compile_definitions(TestingTarget
 # linked automatically. If we'd generated a binary data target above, we would need to link to it
 # here too. This is a standard CMake command.
 
-target_link_libraries(Thunderdrive
+add_subdirectory(src bin)
+add_subdirectory(test)
+
+target_link_libraries(ThunderdrivePlugin
     PRIVATE
         # AudioPluginData           # If we'd created a binary data target, we'd link to it here
         juce::juce_audio_utils
@@ -134,6 +119,3 @@ target_link_libraries(Thunderdrive
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
-
-target_link_libraries(TestingTarget
-        PRIVATE)
