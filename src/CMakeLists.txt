@@ -1,4 +1,5 @@
 add_subdirectory(SimpleFilter)
+add_subdirectory(DiodeClipper)
 add_subdirectory(ThunderdriveProcessor)
 
 include_directories(include)
@@ -17,10 +18,12 @@ target_link_libraries(ThunderdrivePlugin
     PRIVATE
         SimpleFilter
         ThunderdriveProcessor
+        DiodeClipper
 )
 
 target_link_libraries(TestingTarget
     PRIVATE
         SimpleFilter
         ThunderdriveProcessor
+        DiodeClipper
 )

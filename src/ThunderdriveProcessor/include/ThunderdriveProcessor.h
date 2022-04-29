@@ -4,6 +4,7 @@
 #include <limits>
 #include "ErrorDef.h"
 #include "SimpleFilterIf.h"
+#include "DiodeClipper.h"
 
 class ThunderdriveProcessor
 {
