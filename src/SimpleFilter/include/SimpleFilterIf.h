@@ -33,7 +33,7 @@ public:
 
 	FilterType getFilterType() const;
 
-	float process(float in);
+	Error_t process(float& value);
 
 private:
 

@@ -15,7 +15,7 @@ public:
 	Error_t setParam(SimpleFilterIf::FilterParam filterParam, float value);
 	float getParam(SimpleFilterIf::FilterParam filterParam) const;
 
-	virtual float process(float in) = 0;
+	virtual Error_t process(float& value) = 0;
 
 protected:
 
@@ -38,7 +38,7 @@ public:
 	SimpleLowPass(float sampleRate) : SimpleFilter(sampleRate) {};
 	~SimpleLowPass() = default;
 
-	float process(float in) override;
+	Error_t process(float& value) override;
 };
 
 class SimpleHighPass : public SimpleFilter
@@ -48,8 +48,6 @@ public:
 	SimpleHighPass(float sampleRate) : SimpleFilter(sampleRate) {};
 	~SimpleHighPass() = default;
 
-	float process(float in) override;
+	Error_t process(float& value) override;
 		
-private:
-
 };

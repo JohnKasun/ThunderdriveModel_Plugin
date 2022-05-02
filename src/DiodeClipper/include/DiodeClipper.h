@@ -17,7 +17,7 @@ public:
 	float getCutoffGain() const;
 	float getMaxGain() const;
 
-	float process(float sample);
+	Error_t process(float& sample);
 
 private:
 

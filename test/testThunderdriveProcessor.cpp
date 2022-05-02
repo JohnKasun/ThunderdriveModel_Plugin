@@ -1,10 +1,11 @@
 #pragma once
 
+#include <fstream>
+
 #include "catch.hpp"
 #include "ThunderdriveProcessor.h"
 #include "Synthesis.h"
 #include "Util.h"
-#include <fstream>
 
 void CHECK_ARRAY_CLOSE(float* buffer1, float* buffer2, int iNumSamples, float tolerance = 0)
 {

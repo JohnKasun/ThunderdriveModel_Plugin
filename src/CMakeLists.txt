@@ -12,7 +12,8 @@ target_sources(ThunderdrivePlugin
 
 target_link_libraries(ThunderdriveProcessor
     PRIVATE
-        SimpleFilter)
+        SimpleFilter
+        DiodeClipper)
 
 target_link_libraries(ThunderdrivePlugin
     PRIVATE

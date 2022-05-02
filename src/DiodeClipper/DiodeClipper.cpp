@@ -44,11 +44,12 @@ float DiodeClipper::getMaxGain() const
 	return mMaxGain;
 }
 
-float DiodeClipper::process(float sample)
+Error_t DiodeClipper::process(float& sample)
 {
 	if (abs(sample) > mCutoffGain)
 	{
 		float phase = (sample < 0) ? -1.0f : 1.0f;
-		return (0.0238 * sample + phase * 2.6437);
+		sample = (0.0238f * sample + phase * 2.6437f);
 	}
+	return Error_t::kNoError;
 }

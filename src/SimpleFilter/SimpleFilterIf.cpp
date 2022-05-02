@@ -69,10 +69,10 @@ SimpleFilterIf::FilterType SimpleFilterIf::getFilterType() const
 	return mFilterType;
 }
 
-float SimpleFilterIf::process(float in)
+Error_t SimpleFilterIf::process(float& value)
 {
 	if (!mFilter)
-		return 0;
+		return Error_t::kNotInitializedError;
 
-	return mFilter->process(in);
+	return mFilter->process(value);
 }

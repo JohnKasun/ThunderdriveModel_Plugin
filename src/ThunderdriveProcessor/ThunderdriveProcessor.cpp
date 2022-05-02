@@ -68,10 +68,10 @@ Error_t ThunderdriveProcessor::process(float* outBuffer, const float* inBuffer, 
 		applyInputGain(currentValue);
 
 		// Apply distortion from diode stage
-		applyDiodeClipping(currentValue);
+		mDiodeClipper.process(currentValue);
 
 		// Apply post distortion filter
-		currentValue = mFilter.process(currentValue);
+		mFilter.process(currentValue);
 
 		outBuffer[sample] = mParamValues[ThunderdriveProcessor::kGain] * currentValue;
 	}
@@ -90,14 +90,4 @@ void ThunderdriveProcessor::applyInputGain(float& value) const
 	float driveGain = (1 + (R1InOhms / mR2InOhms));
 	value *= driveGain;
 }
-
-void ThunderdriveProcessor::applyDiodeClipping(float& value) const
-{
-	if (abs(value) > mDiodeCutoffGain)
-	{
-		float phase = (value < 0) ? -1.0f : 1.0f;
-		value = (0.0238 * value + phase * 2.6437);
-	}
-}
-
 

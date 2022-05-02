@@ -38,7 +38,6 @@ private:
 	bool isParamInRange(ThunderdriveProcessor::Param_t param, float value) const;
 
 	void applyInputGain(float& value) const;
-	void applyDiodeClipping(float& value) const;
 
 	// Raw circuitry values
 	const float mR1RangesInOhms[2]{ 0, 14925 };
@@ -54,4 +53,5 @@ private:
 
 	float mSampleRate = 1.0;
 	SimpleFilterIf mFilter;
+	DiodeClipper mDiodeClipper{ mDiodeCutoffGain, mDiodeMaxGain };
 };
