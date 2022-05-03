@@ -14,18 +14,22 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
     addAndMakeVisible(mGainSlider);
     mGainAttachment.reset(new SliderAttachment(mValueTreeState, "gain", mGainSlider));
+    mGainSlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
 
     mDriveLabel.setText("Drive", juce::dontSendNotification);
     addAndMakeVisible(mDriveLabel);
 
     addAndMakeVisible(mDriveSlider);
     mDriveAttachment.reset(new SliderAttachment(mValueTreeState, "drive", mDriveSlider));
+    mDriveSlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
 
     mToneLabel.setText("Tone", juce::dontSendNotification);
     addAndMakeVisible(mToneLabel);
 
     addAndMakeVisible(mToneSlider);
     mToneAttachment.reset(new SliderAttachment(mValueTreeState, "tone", mToneSlider));
+    mToneSlider.hideTextBox(true);
+    mToneSlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
 
     setSize(paramSliderWidth + paramLabelWidth, juce::jmax(100, paramControlHeight * 3));
 

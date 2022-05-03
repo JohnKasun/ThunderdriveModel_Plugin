@@ -33,7 +33,6 @@ Error_t DiodeClipper::setMaxGain(float negativeMax, float positiveMax)
 /* Credit for clipping stage:
 * https://github.com/JanosGit/Schrammel_OJD
 */
-
 Error_t DiodeClipper::process(float& sample)
 {
 	float in = sample;
