@@ -40,7 +40,7 @@ private:
 	void applyInputGain(float& value) const;
 
 	// Raw circuitry values
-	const float mR1RangesInOhms[2]{ 0, 14925 };
+	const float mR1RangesInOhms[2]{ 0, 125000 };
 	const float mR2InOhms = 2400.0f;
 	const float mInputMaxVoltage = 0.120f;
 	const float mDiodeMaxVoltage = 0.591f;
