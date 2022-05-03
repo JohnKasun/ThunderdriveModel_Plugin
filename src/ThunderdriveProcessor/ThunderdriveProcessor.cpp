@@ -14,6 +14,9 @@ ThunderdriveProcessor::ThunderdriveProcessor()
 	mParamRanges[ThunderdriveProcessor::kTone][0] = 0.0f;
 	mParamRanges[ThunderdriveProcessor::kTone][1] = 0.99f;
 
+	mDiodeClipper.setCutoffGain(-0.3, 0.9);
+	mDiodeClipper.setMaxGain(-1.7, 1.1);
+
 }
 
 ThunderdriveProcessor::~ThunderdriveProcessor()
@@ -27,7 +30,9 @@ Error_t ThunderdriveProcessor::init(float sampleRate)
 		return Error_t::kFunctionInvalidArgsError;
 
 	mSampleRate = sampleRate;
-	return mFilter.init(SimpleFilterIf::FilterType::kHighPass, sampleRate);
+	mFilterPre.init(SimpleFilterIf::FilterType::kHighPass, sampleRate);
+	mFilterPost.init(SimpleFilterIf::FilterType::kHighPass, sampleRate);
+	return Error_t::kNoError;
 }
 
 Error_t ThunderdriveProcessor::reset()
@@ -36,7 +41,8 @@ Error_t ThunderdriveProcessor::reset()
 		mParamValues[i] = 0;
 
 	mSampleRate = 1.0f;
-	mFilter.reset();
+	mFilterPre.reset();
+	mFilterPost.reset();
 
 	return Error_t::kNoError;
 }
@@ -48,7 +54,10 @@ Error_t ThunderdriveProcessor::setParam(ThunderdriveProcessor::Param_t param, fl
 
 	mParamValues[param] = value;
 	if (param == Param_t::kTone)
-		return mFilter.setParam(SimpleFilterIf::FilterParam::kCutoff, value);
+	{
+		mFilterPre.setParam(SimpleFilterIf::FilterParam::kCutoff, value);
+		mFilterPost.setParam(SimpleFilterIf::FilterParam::kCutoff, value);
+	}
 
 	return Error_t::kNoError;
 }
@@ -67,11 +76,14 @@ Error_t ThunderdriveProcessor::process(float* outBuffer, const float* inBuffer, 
 		// Apply input gain from BJT
 		applyInputGain(currentValue);
 
+		// Apply pre distortion filter
+		mFilterPre.process(currentValue);
+
 		// Apply distortion from diode stage
 		mDiodeClipper.process(currentValue);
 
 		// Apply post distortion filter
-		mFilter.process(currentValue);
+		mFilterPost.process(currentValue);
 
 		outBuffer[sample] = mParamValues[ThunderdriveProcessor::kGain] * currentValue;
 	}

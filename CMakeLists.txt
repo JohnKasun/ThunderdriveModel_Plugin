@@ -54,7 +54,7 @@ juce_add_plugin(ThunderdrivePlugin
     PLUGIN_MANUFACTURER_CODE John               # A four-character manufacturer id with at least one upper-case character
     PLUGIN_CODE Tdrv                            # A unique four-character plugin id with exactly one upper-case character
                                                 # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
-    FORMATS AU VST3 Standalone                  # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
+    FORMATS AU AUv3 VST3 Standalone                  # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
     PRODUCT_NAME "Thunderdrive")                # The name of the final executable, which can differ from the target name
 
 juce_add_console_app(TestingTarget

@@ -5,51 +5,53 @@ DiodeClipper::DiodeClipper()
 
 }
 
-DiodeClipper::DiodeClipper(float cutoffGain, float maxGain) :
-	mCutoffGain{ cutoffGain },
-	mMaxGain{ maxGain }
-{
-
-}
-
 DiodeClipper::~DiodeClipper()
 {
 
 }
 
-Error_t DiodeClipper::setCutoffGain(float cutoffGain)
+Error_t DiodeClipper::setCutoffGain(float negativeCutoff, float positiveCutoff)
 {
-	if (cutoffGain < 0)
+	if (negativeCutoff > 0 || positiveCutoff < 0)
 		return Error_t::kFunctionInvalidArgsError;
 
-	mCutoffGain = cutoffGain;
+	mCutoffGainLowerBound = negativeCutoff;
+	mCutoffGainUpperBound = positiveCutoff;
 	return Error_t::kNoError;
 }
 
-Error_t DiodeClipper::setMaxGain(float maxGain)
+Error_t DiodeClipper::setMaxGain(float negativeMax, float positiveMax)
 {
-	if (maxGain < 0 || maxGain < mCutoffGain)
+	if (negativeMax > 0 || positiveMax < 0)
 		return Error_t::kFunctionInvalidArgsError;
 
-	mMaxGain = maxGain;
-}
-
-float DiodeClipper::getCutoffGain() const
-{
-	return mCutoffGain;
-}
-
-float DiodeClipper::getMaxGain() const
-{
-	return mMaxGain;
+	mMaxGainLowerBound = negativeMax;
+	mMaxGainUpperBound = positiveMax;
+	return Error_t::kNoError;
 }
 
 Error_t DiodeClipper::process(float& sample)
 {
-	if (abs(sample) > mCutoffGain)
+	float in = sample;
+
+	if (in <= mMaxGainLowerBound)
 	{
-		float phase = (sample < 0) ? -1.0f : 1.0f;
-		sample = (0.0238f * sample + phase * 2.6437f);
+		sample = -1.0f;
 	}
+	else if ((in > mMaxGainLowerBound) && (in < mCutoffGainLowerBound))
+	{
+		in += abs(mCutoffGainLowerBound);
+		sample = in + (in * in) / (4 * (1 + mCutoffGainLowerBound)) + mCutoffGainLowerBound;
+	}
+	else if ((in > mCutoffGainUpperBound) && (in < mMaxGainUpperBound))
+	{
+		in -= mCutoffGainUpperBound;
+		sample = in - (in * in) / (4 * (1 - mCutoffGainUpperBound)) + mCutoffGainUpperBound;
+	}
+	else if (mMaxGainUpperBound > 1.1f)
+	{
+		sample = 1.0f;
+	}
+	
 	return Error_t::kNoError;
 }

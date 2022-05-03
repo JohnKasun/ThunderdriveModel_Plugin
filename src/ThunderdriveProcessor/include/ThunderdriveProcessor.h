@@ -52,6 +52,7 @@ private:
 	const float mDiodeCutoffGain = mDiodeCutoffVoltage / mInputMaxVoltage;
 
 	float mSampleRate = 1.0;
-	SimpleFilterIf mFilter;
-	DiodeClipper mDiodeClipper{ mDiodeCutoffGain, mDiodeMaxGain };
+	SimpleFilterIf mFilterPre;
+	SimpleFilterIf mFilterPost;
+	DiodeClipper mDiodeClipper;
 };
